@@ -1,0 +1,115 @@
+body {
+    background-color: #1c2331;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+    text-decoration: none;
+  }
+  
+  .account-page {
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+   .profile {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    flex-direction: row;
+    padding: 20px;
+    background: linear-gradient(rgb(17, 68, 96), rgba(17, 68, 96, 0.5));
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  }
+  
+   .profile img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3)
+  }
+  
+  .details {
+    text-align: left;
+  }
+  
+  .details span {
+    font-size: 1.5em;
+    font-weight: bold;
+    
+  }
+  
+   .details p {
+    margin-top: 0.5em;
+    text-align: center;
+    align-items: center;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  
+  button {
+    background: none;
+    border: none;
+    padding: 1em 2em;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+    margin-left: 10px;
+    background-color: #42a3c3;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3)
+  }
+  
+  button a {
+    text-decoration: none;
+    color: #fff;
+  }
+  
+  button:hover {
+    background-color: #328da4;
+  }
+  
+   .posts {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+   .post {
+    border: 1px #42a3c3 solid;
+    background: linear-gradient(rgb(17, 68, 96), rgba(17, 68, 96, 0.5));
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    width: 250px;
+    margin: 10px;
+    padding: 15px;
+  }
+  
+  .post:hover {
+    transform: scale(1.01);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 1);
+  }
+  
+   .post img {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 0.3em;
+  }
+  
+   .post p {
+    text-align: center;
+    margin-bottom: 0.5em;
+  }
+  
+  .post-details {
+    text-align: center;
+  }
+  
+   .post-details span {
+    display: block;
+    margin-bottom: 0.5em;
+  }

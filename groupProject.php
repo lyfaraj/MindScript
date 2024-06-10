@@ -666,7 +666,9 @@ $total_tasks = $total_tasks_row['total_tasks'];
                     <a href="deleteProject.php?project_id=<?php echo $project_id; ?>" class="icon delete-icon" onclick="return confirmDelete('<?php echo $project_row['project_id']; ?>')">
                         <i class="fas fa-trash"></i>
                     </a>
-                    <a href="leaveProject.php?project_id=<?php echo $project_id; ?>" class="icon leave-project-icon"><i class="fas fa-sign-out-alt"></i></a>
+                    <a href="leaveProject.php?project_id=<?php echo $project_id; ?>" class="icon leave-project-icon" onclick="return confirmLeave('<?php echo $project_row['project_id']; ?>')">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </a>
                 </div>
             </div>
             <div class="tasks-container">
@@ -766,19 +768,32 @@ $total_tasks = $total_tasks_row['total_tasks'];
                 var xhr = new XMLHttpRequest();
                 xhr.open("POST", "projectManager.php", true);
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-                        location.reload();
-                    }
-                };
+                // xhr.onreadystatechange = function () {
+                //     if (xhr.readyState == 4 && xhr.status == 200) {
+                //         location.reload();
+                //     }
+                // };
                 xhr.send("delete_project=" + projectId);
+            }
+        }
+
+        function confirmLeave(projectId) {
+            if (confirm("Are you sure you want to leave this project?")) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "projectManager.php", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                // xhr.onreadystatechange = function () {
+                //     if (xhr.readyState == 4 && xhr.status == 200) {
+                //         location.reload();
+                //     }
+                // };
+                xhr.send("leave_project=" + projectId);
             }
         }
 
         function confirmTaskDelete(taskId) {
             if (confirm("Are you sure you want to delete this task?")) {
                 var xhr = new XMLHttpRequest();
-                xhr.open("POST", "project.php", true);
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == 4 && xhr.status == 200) {

@@ -91,6 +91,7 @@ if ($followers_result) {
     $follower_count = 0;
     echo 'Error fetching follower count: ' . $conn->error;
 }
+
 ?>
 
 
@@ -360,7 +361,19 @@ if ($followers_result) {
                         </div>
                     </div>
                     <div class="buttons">
-                        <button class="follow-button" data-creator-id="<?php echo $row['unique_id']; ?>">Follow</button>
+                        <?php
+                        $follow_check_query = $conn->prepare("SELECT * FROM follows WHERE follower_id = ? AND following_id = ?");
+                        $follow_check_query->bind_param("ss", $_SESSION['unique_id'], $row['unique_id']);
+                        $follow_check_query->execute();
+                        $follow_check_result = $follow_check_query->get_result();
+
+                        if ($follow_check_result && $follow_check_result->num_rows > 0) {
+                            $button_text = "Following";
+                        } else {
+                            $button_text = "Follow";
+                        }
+                        ?>
+                        <button class="follow-button" data-creator-id="<?php echo $row['unique_id']; ?>"><?php echo $button_text; ?></button>
                         <button class="view-cv-button" data-creator-id="<?php echo $row['unique_id']; ?>">View CV</button>
                     </div>
                 </div>
@@ -442,6 +455,7 @@ if ($followers_result) {
                                 this.textContent = "Follow";
                             }
                             this.disabled = true;
+                            location.reload(); 
                         } else {
                             console.error('Follow failed:', data.error);
                             alert('Follow failed: ' + data.error);

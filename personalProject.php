@@ -510,22 +510,9 @@ $total_tasks = $total_tasks_row['total_tasks'];
         }
 
         .file-input-container button {
-            background-color: var(--dark);
+            background-color: #fff
             border: 1px solid #ccc; 
-            color: #fff;
-            width: 100%; 
-            padding: 12px;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            box-shadow: none;
-        }
-
-        #upload-form-container .file-input-container button {
-            background-color: transparent;
-            border: 1px solid #ccc; 
-            color: #fff;
+            color: var(--dark);
             width: 100%; 
             padding: 12px;
             border-radius: 6px;
@@ -596,9 +583,25 @@ $total_tasks = $total_tasks_row['total_tasks'];
                             <input type="hidden" name="task_id" value="<?php echo $task_id; ?>">
                             <input type="hidden" name="title" value="<?php echo $task_title; ?>">
                             <input type="hidden" name="project_id" value="<?php echo $project_id; ?>">
+                            <?php
+                                $finished_check_query = $conn->prepare("SELECT * FROM endTask WHERE task_id = ?");
+                                $finished_check_query->bind_param("s", $task_id);
+                                $finished_check_query->execute();
+                                $finished_check_result = $finished_check_query->get_result();
+
+                                if ($finished_check_result && $finished_check_result->num_rows > 0) {
+                                    $button_text = "Finished";
+                                    $icon_color = "#F0AEB6";
+                                    $checked = true;
+                                } else {
+                                    $button_text = "Unfinished";
+                                    $icon_color = "#615C83";
+                                    $checked = false; 
+                                }
+                            ?>
                             <label class="icon finish-checkbox">
-                                <input type="checkbox" name="finished" value="1" class="finish-checkbox" data-task-id="<?php echo $task_id; ?>" style="display: none;">
-                                <i id="check-icon-<?php echo $task_id; ?>" class="fas fa-check-circle"></i>
+                                <input type="checkbox" name="finished" value="1" class="finish-checkbox" data-task-id="<?php echo $task_id; ?>" style="display: none;" <?php if ($checked) echo 'checked'; ?>>
+                                <i id="check-icon-<?php echo $task_id; ?>" class="fas fa-check-circle" style="color: <?php echo $icon_color; ?>"></i>
                             </label>
                         </form>
                         <a href="deleteTask.php?task_id=<?php echo $task_row['id']; ?>&project_id=<?php echo $project_id; ?>" class="icon delete-icon" onclick="return confirm('Are you sure you want to delete this task?')">
@@ -672,11 +675,11 @@ $total_tasks = $total_tasks_row['total_tasks'];
                 var xhr = new XMLHttpRequest();
                 xhr.open("POST", "projectManager.php", true);
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-                        location.reload();
-                    }
-                };
+                // xhr.onreadystatechange = function () {
+                //     if (xhr.readyState == 4 && xhr.status == 200) {
+                //         location.reload();
+                //     }
+                // };
                 xhr.send("delete_project=" + projectId);
             }
         }
@@ -684,7 +687,6 @@ $total_tasks = $total_tasks_row['total_tasks'];
         function confirmTaskDelete(taskId) {
             if (confirm("Are you sure you want to delete this task?")) {
                 var xhr = new XMLHttpRequest();
-                xhr.open("POST", "project.php", true);
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == 4 && xhr.status == 200) {
@@ -722,38 +724,39 @@ $total_tasks = $total_tasks_row['total_tasks'];
         });
 
         document.addEventListener('DOMContentLoaded', function() {
-            const checkboxes = document.querySelectorAll('.finish-checkbox');
+    const checkboxes = document.querySelectorAll('.finish-checkbox');
 
-            checkboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', function() {
-                    const taskId = this.dataset.taskId;
-                    const finished = this.checked ? 1 : 0;
-                    const form = this.closest('form');
-                    const formData = new FormData(form);
-                    const checked = this.checked;
-                    const checkIcon = document.getElementById('check-icon-' + taskId);
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const taskId = this.dataset.taskId;
+            const finished = this.checked ? 1 : 0;
+            const form = this.closest('form');
+            const formData = new FormData(form);
+            const checked = this.checked;
+            const checkIcon = document.getElementById('check-icon-' + taskId);
 
-                    if (checked) {
-                        checkIcon.style.color = 'green'; 
-                    } else {
-                        checkIcon.style.color = 'initial'; 
-                    }
+            if (checked) {
+                checkIcon.style.color = '#F0AEB6';
+            } else {
+                checkIcon.style.color = '#615C83';
+            }
 
-                    formData.append('task_id', taskId);
-                    formData.append('finished', finished);
+            formData.append('task_id', taskId);
+            formData.append('finished', finished);
 
-                    fetch('', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => response.text())
-                    .then(data => {
-                        console.log(data);
-                    })
-                    .catch(error => console.error('Error:', error));
-                });
-            });
+            fetch('', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+                location.reload(); // Reload the page
+            })
+            .catch(error => console.error('Error:', error));
         });
+    });
+});
 
         var ctx = document.getElementById('myChart').getContext('2d');
         var myChart = new Chart(ctx, {

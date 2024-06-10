@@ -17,7 +17,7 @@ if ($task_id === null) {
 $delete_query = "DELETE FROM tasks WHERE id = $task_id AND project_id IN (SELECT project_id FROM projects WHERE user_id = $user_id)";
 
 if (mysqli_query($conn, $delete_query)) {
-    header("location: projectManager.php");
+    header("location: personalProject.php");
     exit();
 } else {
     echo "Error deleting task: " . mysqli_error($conn);

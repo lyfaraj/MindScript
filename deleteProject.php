@@ -3,6 +3,7 @@ session_start();
 
 if (isset($_SESSION['unique_id'])) {
     include_once "php/config.php";
+    
     $delete_id = mysqli_real_escape_string($conn, $_GET['project_id']);
 
     mysqli_query($conn, "DELETE FROM tasks WHERE project_id = $delete_id");
